@@ -11,5 +11,5 @@ Movie Searchbox case solution with below features
 9. Favourite movies should be show in seperated list below nonfavourite movies list.
 10.The favourite state of any movie should be show as icon on movie chart. (favourite with filled star icon, non favourite with empty star icon)
 
-##Demo Link
+## DemoLink
 https://salmanorak.github.io/search-case/
