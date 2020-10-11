@@ -48,7 +48,6 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         if(prevSearchList.length){
             $(createPrevSearchList(prevSearchList)).appendTo(domKeys.prevSearch.itemList)
         }
-
     };
 
     //business logic
@@ -71,6 +70,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         domKeys.resultList.itemList.html('')
         addToPrevList(str);
         if(str.length >= minSearchCharCount){
+            
             $.ajax({
                 url: url,            
                 method: 'GET',
@@ -86,6 +86,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
                 },
                 beforeSend: function() {
                     setIsLoading(true)
+                    setSearchMessage(str)
                 },
                 complete: function(){
                     setIsLoading(false)
@@ -174,6 +175,9 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     setErrorMessage= ()=>{
         domKeys.error.text(`type at least ${minSearchCharCount} characters`)
     }
+    setSearchMessage= (str)=>{
+        domKeys.resultList.loadingPlaceHolder.find('span').text(`Searching for ${str}`);
+    }   
 
     //helper functions
     getPreviousSearchData = () =>{
