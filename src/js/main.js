@@ -222,23 +222,27 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         setFavListData(favList);
         elem.fadeOut(()=>{elem.remove()});
     }
+    validateInput= (el)=>{
+        let str = el.val()
+        let minLength = el.attr('minLength')
+        if(str.length < minLength){
+            el.addClass('has-error')
+            domKeys.error.show()
+            domKeys.searchButton.addClass('disabled')
+            return false
+        }else{
+            domKeys.error.hide()
+            el.removeClass('has-error')
+            domKeys.searchButton.removeClass('disabled')   
+            return true     
+        }
+    }
 
     // Event Handlers
     eventHandlers =(()=> {
         return{
             searchInputValidation : (e)=>{
-                let el= $(e.target)
-                let str = el.val()
-                let minLength = el.attr('minLength')
-                if(str.length < minLength){
-                    el.addClass('has-error')
-                    domKeys.error.show()
-                    domKeys.searchButton.addClass('disabled')
-                }else{
-                    domKeys.error.hide()
-                    el.removeClass('has-error')
-                    domKeys.searchButton.removeClass('disabled')        
-                }
+                validateInput($(e.target))
             },
 
             searchInputKeyPressed : (event)=>{
@@ -248,6 +252,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
             },
 
             searchEventHandler : (event)=>{
+                if(!validateInput(domKeys.input)) return false;
                 searchByString(domKeys.input.val());
             },
 
