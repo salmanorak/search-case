@@ -195,9 +195,10 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     }
     removePrevList= (str)=>{
         let index = prevSearchList.indexOf(str)
+        let elem = domKeys.prevSearch.container.find(`.list-item[data='${str}']`);
         prevSearchList.splice(index,1)
         setPreviousSearchData(prevSearchList);
-        domKeys.prevSearch.container.find(`.list-item[data='${str}']`).remove()
+        elem.fadeOut(600, ()=>{elem.remove()});
     }
     getFavListData = () =>{
         let result = JSON.parse(localStorage.getItem('favList'))
@@ -213,9 +214,10 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     }
     removeFavList= (movie)=>{
         let index = favList.indexOf(movie)
+        let elem = domKeys.favList.itemList.find(`[data-id='${movie.id}']`);
         favList.splice(index,1)
         setFavListData(favList);
-        domKeys.favList.itemList.find(`[data-id='${movie.id}']`).remove();
+        elem.fadeOut(()=>{elem.remove()});
     }
 
     // Event Handlers
