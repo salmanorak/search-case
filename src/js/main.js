@@ -17,6 +17,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     init = () =>{
         setErrorMessage();
         domKeys.input.on('keyup' , eventHandlers.searchInputValidation)
+        domKeys.input.on('keydown' , eventHandlers.searchInputKeyPressed)
         domKeys.input.attr('minLength',minSearchCharCount)
         domKeys.searchButton.on('click' , eventHandlers.searchEventHandler)
         appSelector.on('click','.icon', eventHandlers.favIconClickHandler)
@@ -29,7 +30,9 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     setMovieList= (list=[])=>{
         clearList()
         movieList = new MovieDataModel(list);
+        movieList.forEach( movieItem => movieItem.isFav = favList.some(item=> item.id == movieItem.id))
         if(maxMovieResultCount) movieList = movieList.slice( 0, maxMovieResultCount )
+        
         if(movieList.length){
             $(createMovieList(movieList)).appendTo(domKeys.resultList.itemList).hide().fadeIn(500);
             hideNoResult();
@@ -174,6 +177,11 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
                     domKeys.searchButton.removeClass('disabled')        
                 }
             },
+            searchInputKeyPressed : (event)=>{
+                if(event.which=='13'){
+                    searchByString(domKeys.input.val());
+                }
+            },
             searchEventHandler : (event)=>{
                 searchByString(domKeys.input.val());
             },
@@ -202,7 +210,8 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
 
     return {
         searchByString,
-        init
+        init,
+        favList
     }
 }
 
