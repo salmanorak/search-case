@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    user-select:none;
 }
 input:focus{
     outline: none;
@@ -16,11 +17,13 @@ body{
     grid-template: 'a' 
                    'a';
     height: 100px;
+    position: relative;
 }
 #search #search-input {
-    border:none;
+    border:1px solid transparent;
     border-radius: 10px 10px 0 0;
     text-align: center;
+
 }
 #search .search-button {
     position: relative;
@@ -32,11 +35,13 @@ body{
     font-weight: 700;
     border-radius: 0 0 10px 10px;
     cursor: pointer;
+    transition: all 0.3s;
 }
 
 #search .search-button.disabled {
     background-color: rgba(0,0,0,0.3);
     cursor: no-drop;
+    transition: all 0.3s;
 }
 #search .search-button.disabled:hover {
     background-color: rgba(0,0,0,0.3);
@@ -53,9 +58,23 @@ body{
     content: "\f002";
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-    left: -30px;
-    top: 50%;
-    transform: translateY(-50%); 
+    left:-30px;
+}
+#search .search-button.searching span::before{
+    content: "\f110";
+    animation: 2s rotate linear infinite
+}
+
+.error{
+    color: red;
+    font-size: 0.8em;
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.has-error{
+    border: 1px red solid !important;
 }
 #search .previous-search{
     background-color: white;
@@ -109,6 +128,7 @@ body{
 }
 .list .item-card {
     margin: 0 auto;
+    max-width: 300px;
 }
 
 .list .item-card .poster{
@@ -204,7 +224,7 @@ body{
     }
     #search .search-input{
         grid-template-columns: 4fr 1fr;
-        height: 50px;
+        height: 60px;
     }
     
     #search #search-input {
@@ -212,13 +232,17 @@ body{
         text-align: left;
         padding-left: 20px;
     }
+    .error{
+        bottom: 15px;
+        left: 20px;
+        top: auto;
+        right: auto;
+    }
     #search .search-button {
         font-size: 1.3em;
         border-radius: 0 10px 10px 0;
         padding: 5px
     }
-
-
     .items{
         grid-template-columns: repeat(5, 1fr);
         align-items: start;
@@ -238,4 +262,8 @@ body{
         width: 200px;
         height: 250px;
     }
-}
+}/*animations*/
+@keyframes rotate{
+    from {transform: rotate(0deg)}
+    to {transform: rotate(360deg)}
+  }
