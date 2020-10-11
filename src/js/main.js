@@ -5,25 +5,31 @@ function MovieDataModel(list){
             let ratingScore = 4.7 // ratingScore added randomly;
             let isFav
             imageUrl = imageUrl == 'N/A' ? 'https://placehold.jp/300x400.png' : imageUrl
-
+            
             return {name,imageUrl,year,id,type,ratingScore,isFav} 
         })
 }
 
 //Controller
-function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, maxMovieResultCount=0}) {   
+function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, maxMovieResultCount=0}, maxPrevSearchCount=10) {   
     let movieList= [];
     let favList= [];
+    let prevSearchList = [];
     init = () =>{
         setErrorMessage();
-        domKeys.input.on('keyup' , eventHandlers.searchInputValidation)
+        domKeys.input.on('keyup blur' , eventHandlers.searchInputValidation)
         domKeys.input.on('keydown' , eventHandlers.searchInputKeyPressed)
         domKeys.input.attr('minLength',minSearchCharCount)
         domKeys.searchButton.on('click' , eventHandlers.searchEventHandler)
         appSelector.on('click','.icon', eventHandlers.favIconClickHandler)
+        appSelector.on('click','.previous-search .list .list-item' , eventHandlers.prevSearchClickHandler)
         favList = getFavListData();
         if(favList.length){
             $(createMovieList(favList)).appendTo(domKeys.favList.itemList).hide().fadeIn();
+        }
+        prevSearchList = getPreviousSearchData();
+        if(prevSearchList.length){
+            $(createPrevSearchList(prevSearchList)).appendTo(domKeys.prevSearch.itemList)
         }
 
     };
@@ -32,7 +38,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         movieList = new MovieDataModel(list);
         movieList.forEach( movieItem => movieItem.isFav = favList.some(item=> item.id == movieItem.id))
         if(maxMovieResultCount) movieList = movieList.slice( 0, maxMovieResultCount )
-        
+
         if(movieList.length){
             $(createMovieList(movieList)).appendTo(domKeys.resultList.itemList).hide().fadeIn(500);
             hideNoResult();
@@ -41,7 +47,9 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         }
     };
     searchByString = (str='')=>{
+        if(domKeys.searchButton.hasClass('disabled')) return;
         domKeys.resultList.itemList.html('')
+        addToPrevList(str);
         if(str.length >= minSearchCharCount){
             $.ajax({
                 url: url,            
@@ -86,7 +94,14 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         </div>`
         ).join('');
     };
-
+    createPrevSearchList = (list)=>{
+        return list.map(item =>
+         `<div class="list-item" data="${item}"=>
+            <span>${item}</span>
+            <em class="close far fa-times-circle"></em>
+        </div>`
+         ).join('');
+     };
     const domKeys = ((app)=>{
         return{
             input : $(app).find('#search-input'),
@@ -94,7 +109,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
             error : $(app).find('.error'),
             prevSearch :{
                 container: $(app).find('.previous-search'),
-                itemList:$(app).find('.previous-search .list') 
+                itemList:$(app).find('.previous-search .list'),
             },
             resultList: {
                 container: $(app).find('#result-list'),
@@ -142,6 +157,22 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     setPreviousSearchData= (data)=>{
         localStorage.setItem('prevSearch',JSON.stringify(data))
     };
+    addToPrevList= (str)=>{
+        if(!prevSearchList.includes(str)){
+            if(prevSearchList.length >= maxPrevSearchCount){
+                removePrevList(prevSearchList[0]);
+            }
+            prevSearchList.push(str);
+            setPreviousSearchData(prevSearchList);
+            $(createPrevSearchList([str])).appendTo(domKeys.prevSearch.itemList);
+        }
+    }
+    removePrevList= (str)=>{
+        let index = prevSearchList.indexOf(str)
+        prevSearchList.splice(index,1)
+        setPreviousSearchData(prevSearchList);
+        domKeys.prevSearch.container.find(`.list-item[data='${str}']`).remove()
+    }
     getFavListData = () =>{
         let result = JSON.parse(localStorage.getItem('favList'))
         return result ? result : []
@@ -204,14 +235,21 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
                     removeFavList(movie)
                 }
 
+            },
+            prevSearchClickHandler: (e)=>{
+                let str = $(e.currentTarget).find('span').text()
+                if($(e.target).hasClass('close')){
+                    removePrevList(str)
+                }else{
+                    domKeys.input.val(str).blur()
+                    searchByString(str);
+                }
             }
         }
     })()
 
     return {
-        searchByString,
         init,
-        favList
     }
 }
 
