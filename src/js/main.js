@@ -68,9 +68,8 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     searchByString = (str='')=>{
         if(domKeys.searchButton.hasClass('disabled')) return;
         domKeys.resultList.itemList.html('')
-        addToPrevList(str);
         if(str.length >= minSearchCharCount){
-            
+            addToPrevList(str);
             $.ajax({
                 url: url,            
                 method: 'GET',
