@@ -148,7 +148,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         domKeys.resultList.itemList.html('')
     }
     setErrorMessage= ()=>{
-        domKeys.error.text(`Type at least ${minSearchCharCount} characters`)
+        domKeys.error.text(`type at least ${minSearchCharCount} characters`)
     }
     getPreviousSearchData = () =>{
         let result = JSON.parse(localStorage.getItem('prevSearch'))

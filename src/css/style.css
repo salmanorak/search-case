@@ -70,8 +70,9 @@ body{
     font-size: 0.8em;
     display: none;
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .has-error{
     border: 1px red solid !important;
@@ -237,6 +238,7 @@ body{
         left: 20px;
         top: auto;
         right: auto;
+        transform: none;
     }
     #search .search-button {
         font-size: 1.3em;
