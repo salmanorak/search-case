@@ -35,13 +35,13 @@ body{
     font-weight: 700;
     border-radius: 0 0 10px 10px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: background-color 0.3s;
 }
 
 #search .search-button.disabled {
     background-color: rgba(0,0,0,0.3);
     cursor: no-drop;
-    transition: all 0.3s;
+    transition: background-color 0.3s;
 }
 #search .search-button.disabled:hover {
     background-color: rgba(0,0,0,0.3);
