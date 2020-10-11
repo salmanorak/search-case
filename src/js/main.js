@@ -4,7 +4,7 @@ function MovieDataModel(list){
         .map(({Title :name, Poster : imageUrl, Year: year, imdbID:id, Type: type})=> {   
             let ratingScore = Number(Math.random()*10).toFixed(1) // ratingScore added randomly;
             let isFav
-            imageUrl = imageUrl == 'N/A' ? 'http://placehold.jp/300x400.png' : imageUrl
+            imageUrl = imageUrl == 'N/A' ? 'https://placehold.jp/300x400.png' : imageUrl
 
             return {name,imageUrl,year,id,type,ratingScore,isFav} 
         })
@@ -144,7 +144,7 @@ function SearchBoxController({apiKey, url,appSelector,minSearchCharCount=3,maxMo
 
 const options = {
     apiKey: '9397ebd6',
-    url: 'http://www.omdbapi.com/',
+    url: 'https://www.omdbapi.com/',
     appSelector : $('#app'),
     minSearchCharCount : 6,
     maxMovieResultCount : 6
