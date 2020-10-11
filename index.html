@@ -6,10 +6,61 @@
     <title>SearchBox Case</title>
     <link rel="stylesheet" href="./src/css/style.css">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="./src/js/helper.js"></script>
-    <script src="./src/js/main.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <script defer src="./src/js/main.js"></script>
 </head>
 <body>
-    
+    <div id="app">
+        <div class="app-wrapper">
+            <div id="search">
+                <div class="search-input">
+                    <input type="text" name="search-input" id="search-input" placeholder="Type movie name">
+                    <div class="search-button">
+                        <span>Search</span>
+                    </div>
+                </div>
+                <div class="previous-search"> 
+                    <div class="title">Previous Search Keys</div>
+                    <div class="list">
+                        <div class="list-item item1">
+                            <span>Deneme1</span>
+                            <em class="far fa-times-circle"></em>
+                        </div>
+                        <div class="list-item item2">
+                            <span>Deneme2</span>
+                            <em class="far fa-times-circle"></em>
+                        </div>
+                        <div class="list-item item3">
+                            <span>Deneme3</span>
+                            <em class="far fa-times-circle"></em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div id="movie-list">
+            <div id="result-list" class="list">
+                <div class="list-wrapper">
+                    <div class="desc">Search Results</div>
+                    <div class="placeholder no-result">
+                        <em class="fas fa-ban"></em> 
+                        No Result
+                    </div>
+                    <div class="placeholder loading">
+                        <em class="fas fa-circle-notch fa-spin"></em>
+                        Loading
+                    </div>
+                    <div class="items">
+                    </div>
+                </div>
+            </div>
+            <div id="fav-list" class="list">
+                <div class="list-wrapper">
+                    <div class="desc"> Favourites</div>
+                    <div class="items">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

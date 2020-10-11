@@ -1,0 +1,241 @@
+* {
+    box-sizing: border-box;
+}
+input:focus{
+    outline: none;
+}
+body{
+    background-color: rgba(122, 204, 241,0.4);
+}
+#app{
+    margin: 50px 10px;
+}
+
+#search .search-input{
+    display: grid;
+    grid-template: 'a' 
+                   'a';
+    height: 100px;
+}
+#search #search-input {
+    border:none;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+}
+#search .search-button {
+    position: relative;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    background-color: rgba(241, 136, 224,1);
+    color: white;
+    font-weight: 700;
+    border-radius: 0 0 10px 10px;
+    cursor: pointer;
+}
+
+#search .search-button.disabled {
+    background-color: rgba(0,0,0,0.3);
+    cursor: no-drop;
+}
+#search .search-button.disabled:hover {
+    background-color: rgba(0,0,0,0.3);
+}
+
+#search .search-button:hover{
+    background-color: rgba(241, 136, 224,0.7); ;
+}
+#search .search-button span {
+    position: relative;
+}
+#search .search-button span::before{
+    position: absolute;
+    content: "\f002";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%); 
+}
+#search .previous-search{
+    background-color: white;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+#search .previous-search .title{
+    font-weight: 700
+}
+
+#search .previous-search .list{
+    display: flex;
+    gap: 20px;
+    margin-top : 10px;
+    flex-wrap: wrap;
+}
+#search .previous-search .list .list-item{
+    background-color:rgba(156, 195, 221, 0.356);
+    padding: 5px 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+#search .previous-search .list .list-item em{
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+#movie-list .desc{
+    font-size: 1.5em;
+    font-weight: 700;
+    padding-bottom: 10px;
+}
+
+#movie-list .placeholder{
+    display: none;
+    height: 250px;
+    align-items:center;
+    justify-content:center;
+    font-size: 2em;
+    border-radius: 10px;
+    margin: 10px 0;
+    color: rgba(0,0,0,0.3);
+}
+#movie-list .placeholder.show{
+    display: flex;
+}
+#movie-list .list{
+    margin-top: 30px;
+}
+.list .item-card {
+    margin: 0 auto;
+}
+
+.list .item-card .poster{
+    position: relative;
+    background-color: midnightblue;
+    border-radius: 10px 10px 0 0;
+}
+.list .item-card .poster .image{
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+    max-height: 400px;
+}
+.list .item-card .poster .overlay{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    width: 100%;
+    background-image: linear-gradient(to bottom,rgba(0,0,0,0),#000000);
+}
+.list .item-card .poster .overlay .item{
+    position: absolute;
+    bottom: 20px;
+}
+
+.list .item-card .poster .overlay .item .icon{ 
+    cursor: pointer;
+}
+
+.list .item-card .poster .overlay .item .icon::before{
+    content: "\f005";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;    
+}
+
+.list .item-card .poster .overlay .item .fav.icon::before{
+    font-weight: 900;  
+}
+
+.list .item-card .poster .overlay .item.rating{
+    color: #fbc607;
+    left: 20px
+}
+.list .item-card .poster .overlay .item.year{
+    color: #fff;
+    font-weight: 700;
+    right: 20px;
+}
+
+.items{
+    display: grid;
+    gap: 20px;
+}
+.item-card{
+    transition: all .5s ease;
+}
+.items .detail{
+    background-color: #181a25;
+    padding: 10px 20px;
+    color: #fff;
+    position: relative;
+    border-radius: 0 0 10px 10px;
+}
+
+.items .detail .title{
+    font-weight: 700;
+    max-width: 50vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap; 
+}
+
+.items .detail .type{
+    color: #6d7080;
+    font-size: 0.8em
+}
+
+@media only screen and (min-width: 450px){
+    .items{
+        grid-template-columns: repeat(2, 1fr);
+        align-items: center;
+    }
+    .items .detail .title{
+        max-width: 35vw;
+    }
+}
+
+
+@media only screen and (min-width: 1023px){
+    #app{
+        margin: 50px 50px;
+    }
+    #search .search-input{
+        grid-template-columns: 4fr 1fr;
+        height: 50px;
+    }
+    
+    #search #search-input {
+        border-radius: 10px 0 0 10px;
+        text-align: left;
+        padding-left: 20px;
+    }
+    #search .search-button {
+        font-size: 1.3em;
+        border-radius: 0 10px 10px 0;
+        padding: 5px
+    }
+
+
+    .items{
+        grid-template-columns: repeat(5, 1fr);
+        align-items: start;
+    }
+    .list .item-card .poster .overlay{
+        font-size: 0.8em;
+    }
+    .items .detail .title{
+        max-width: 150px;
+    }
+
+    #list .item-card .image{
+        height: 100px;
+        width: 50px;
+    }
+    .list .item-card .poster .image{
+        width: 200px;
+        height: 250px;
+    }
+}
