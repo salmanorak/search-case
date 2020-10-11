@@ -1,28 +1,45 @@
-//DataModel
-function MovieDataModel(list){
-    return list
-        .map(({Title :name, Poster : imageUrl, Year: year, imdbID:id, Type: type})=> {   
-            let ratingScore = 4.7 // ratingScore added randomly;
+//controller options
+const options = {
+    apiKey: '9397ebd6',
+    url: 'https://www.omdbapi.com/',
+    appSelector : $('#app'),
+}
+
+// Controller Initiated
+const controller = new SearchBoxController(options)
+$(document).ready(()=>{
+    controller.init();
+})
+
+//Controller and default options values
+function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, maxMovieResultCount=0}, maxPrevSearchCount=10) {   
+    //DataModel for movie item
+    function MovieDataModel(list){
+        return list.map(({Title :name, Poster : imageUrl, Year: year, imdbID:id, Type: type})=> {   
+            let ratingScore = 4.7 // ratingScore added manually;
             let isFav
             imageUrl = imageUrl == 'N/A' ? 'https://placehold.jp/300x400.png' : imageUrl
             
             return {name,imageUrl,year,id,type,ratingScore,isFav} 
         })
-}
-
-//Controller
-function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, maxMovieResultCount=0}, maxPrevSearchCount=10) {   
+    }
+    //states and data
     let movieList= [];
     let favList= [];
     let prevSearchList = [];
+
+    //initial setup function
     init = () =>{
-        setErrorMessage();
+        //events
         domKeys.input.on('keyup blur' , eventHandlers.searchInputValidation)
         domKeys.input.on('keydown' , eventHandlers.searchInputKeyPressed)
         domKeys.input.attr('minLength',minSearchCharCount)
         domKeys.searchButton.on('click' , eventHandlers.searchEventHandler)
         appSelector.on('click','.icon', eventHandlers.favIconClickHandler)
         appSelector.on('click','.previous-search .list .list-item' , eventHandlers.prevSearchClickHandler)
+        
+        //read and assign initial data
+        setErrorMessage();
         favList = getFavListData();
         if(favList.length){
             $(createMovieList(favList)).appendTo(domKeys.favList.itemList).hide().fadeIn();
@@ -33,6 +50,8 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         }
 
     };
+
+    //business logic
     setMovieList= (list=[])=>{
         clearList()
         movieList = new MovieDataModel(list);
@@ -46,6 +65,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
             setNoResult();
         }
     };
+
     searchByString = (str='')=>{
         if(domKeys.searchButton.hasClass('disabled')) return;
         domKeys.resultList.itemList.html('')
@@ -74,6 +94,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         }
     };
 
+    // HTML Templates
     createMovieList= (list)=>{
        return list.map(item =>
         `<div class="item-card" data-id="${item.id}">
@@ -102,28 +123,31 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         </div>`
          ).join('');
      };
+
+    // Dom references
     const domKeys = ((app)=>{
         return{
-            input : $(app).find('#search-input'),
-            searchButton : $(app).find('.search-button'),
-            error : $(app).find('.error'),
+            input : app.find('#search-input'),
+            searchButton : app.find('.search-button'),
+            error : app.find('.error'),
             prevSearch :{
-                container: $(app).find('.previous-search'),
-                itemList:$(app).find('.previous-search .list'),
+                container: app.find('.previous-search'),
+                itemList:app.find('.previous-search .list'),
             },
             resultList: {
-                container: $(app).find('#result-list'),
-                itemList: $(app).find('#result-list .items'),
-                noResultPlaceHolder: $(app).find('.placeholder.no-result'),
-                loadingPlaceHolder : $(app).find('.placeholder.loading'),
+                container: app.find('#result-list'),
+                itemList: app.find('#result-list .items'),
+                noResultPlaceHolder: app.find('.placeholder.no-result'),
+                loadingPlaceHolder : app.find('.placeholder.loading'),
             },
             favList: {
-                container:$(app).find('#fav-list'),
-                itemList:$(app).find('#fav-list .items') 
+                container:app.find('#fav-list'),
+                itemList:app.find('#fav-list .items') 
             }
         }
     })(appSelector);
 
+    //UI functions
     setNoResult = ()=>{
         domKeys.resultList.noResultPlaceHolder.addClass('show')
     }
@@ -150,6 +174,8 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     setErrorMessage= ()=>{
         domKeys.error.text(`type at least ${minSearchCharCount} characters`)
     }
+
+    //helper functions
     getPreviousSearchData = () =>{
         let result = JSON.parse(localStorage.getItem('prevSearch'))
         return result ? result : [] 
@@ -192,6 +218,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         domKeys.favList.itemList.find(`[data-id='${movie.id}']`).remove();
     }
 
+    // Event Handlers
     eventHandlers =(()=> {
         return{
             searchInputValidation : (e)=>{
@@ -208,14 +235,17 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
                     domKeys.searchButton.removeClass('disabled')        
                 }
             },
+
             searchInputKeyPressed : (event)=>{
                 if(event.which=='13'){
                     searchByString(domKeys.input.val());
                 }
             },
+
             searchEventHandler : (event)=>{
                 searchByString(domKeys.input.val());
             },
+
             favIconClickHandler: (e)=>{
                 let movieId = $(e.target).parents('.item-card').attr('data-id')
                 let movie;
@@ -236,6 +266,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
                 }
 
             },
+
             prevSearchClickHandler: (e)=>{
                 let str = $(e.currentTarget).find('span').text()
                 if($(e.target).hasClass('close')){
@@ -249,19 +280,6 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     })()
 
     return {
-        init,
+        init, // only init method is accessible from outside of controller.
     }
 }
-
-const options = {
-    apiKey: '9397ebd6',
-    url: 'https://www.omdbapi.com/',
-    appSelector : $('#app'),
-}
-
-// Controller Initiated
-var controller = new SearchBoxController(options)
-
-$(document).ready(()=>{
-    controller.init();
-})
