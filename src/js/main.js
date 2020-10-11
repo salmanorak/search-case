@@ -18,7 +18,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         return list.map(({Title :name, Poster : imageUrl, Year: year, imdbID:id, Type: type})=> {   
             let ratingScore = 4.7 // ratingScore added manually;
             let isFav
-            imageUrl = imageUrl == 'N/A' ? 'https://placehold.jp/300x400.png' : imageUrl
+            imageUrl = imageUrl == 'N/A' ? 'src/asset/img/placeholderimg.png' : imageUrl
             
             return {name,imageUrl,year,id,type,ratingScore,isFav} 
         })
