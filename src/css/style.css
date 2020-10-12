@@ -126,6 +126,9 @@ body{
 #movie-list .placeholder.show{
     display: flex;
 }
+#movie-list .placeholder.loading{
+    font-size: 1.5em
+}
 
 #movie-list .list{
     margin-top: 30px;

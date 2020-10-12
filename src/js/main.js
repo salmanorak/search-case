@@ -54,7 +54,6 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
 
     //business logic
     setMovieList= (list=[])=>{
-        clearList()
         movieList = new MovieDataModel(list);
         movieList.forEach( movieItem => movieItem.isFav = favList.some(item=> item.id == movieItem.id))
         if(maxMovieResultCount) movieList = movieList.slice( 0, maxMovieResultCount )
@@ -63,13 +62,11 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
             $(createMovieList(movieList)).appendTo(domKeys.resultList.itemList).hide().fadeIn(500);
             hideNoResult();
         }else{
-            setNoResult();
+            showNoResult();
         }
     };
 
     searchByString = (str='')=>{
-        if(domKeys.searchButton.hasClass('disabled')) return;
-        domKeys.resultList.itemList.html('')
         if(str.length >= minSearchCharCount){
             addToPrevList(str);
             $.ajax({
@@ -86,8 +83,9 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
                     console.log(error);
                 },
                 beforeSend: function() {
-                    setIsLoading(true)
-                    setSearchMessage(str)
+                    setSearchMessage(str);
+                    clearMovieList();
+                    setIsLoading(true);
                 },
                 complete: function(){
                     setIsLoading(false)
@@ -150,7 +148,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     })(appSelector);
 
     //UI functions
-    setNoResult = ()=>{
+    showNoResult = ()=>{
         domKeys.resultList.noResultPlaceHolder.addClass('show')
     }
     hideNoResult = ()=>{
@@ -170,7 +168,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
                                 .text('Search')
         }
     }
-    clearList= ()=>{
+    clearMovieList= ()=>{
         domKeys.resultList.itemList.html('')
     }
     setErrorMessage= ()=>{
@@ -178,7 +176,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
     }
     setSearchMessage= (str)=>{
         domKeys.resultList.loadingPlaceHolder.find('span').text(`Searching for ${str}`);
-    }   
+    } 
 
     //helper functions
     getPreviousSearchData = () =>{
@@ -226,6 +224,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         setFavListData(favList);
         elem.fadeOut(()=>{elem.remove()});
     }
+    //Input Validation
     validateInput= (el)=>{
         let str = el.val()
         let minLength = el.attr('minLength')
@@ -249,13 +248,13 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
                 validateInput($(e.target))
             },
 
-            searchInputKeyPressed : (event)=>{
-                if(event.which=='13'){
+            searchInputKeyPressed : (e)=>{
+                if(e.which=='13'){
                     searchByString(domKeys.input.val());
                 }
             },
 
-            searchEventHandler : (event)=>{
+            searchEventHandler : (e)=>{
                 if(!validateInput(domKeys.input)) return false;
                 searchByString(domKeys.input.val());
             },
