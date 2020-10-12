@@ -47,6 +47,8 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         prevSearchList = getPreviousSearchData();
         if(prevSearchList.length){
             $(createPrevSearchList(prevSearchList)).appendTo(domKeys.prevSearch.itemList)
+        }else{
+            domKeys.prevSearch.container.hide();
         }
     };
 
@@ -195,6 +197,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
             setPreviousSearchData(prevSearchList);
             $(createPrevSearchList([str])).appendTo(domKeys.prevSearch.itemList);
         }
+        domKeys.prevSearch.container.slideDown();
     }
     removePrevList= (str)=>{
         let index = prevSearchList.indexOf(str)
@@ -202,6 +205,7 @@ function SearchBoxController({apiKey, url, appSelector, minSearchCharCount=3, ma
         prevSearchList.splice(index,1)
         setPreviousSearchData(prevSearchList);
         elem.fadeOut(600, ()=>{elem.remove()});
+        if(prevSearchList.length === 0) domKeys.prevSearch.container.slideUp();
     }
     getFavListData = () =>{
         let result = JSON.parse(localStorage.getItem('favList'))
