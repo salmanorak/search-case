@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchBox Case</title>
+    <link rel="stylesheet" href="./src/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <script defer src="./src/js/xmain.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="app-wrapper">
+            <div id="search">
+                <div class="search-input-wrapper">
+                    <input type="text" autocomplete="off" name="search" id="search-input" placeholder="Type movie name">
+                    <div class="search-button">
+                        <span>Search</span>
+                    </div>
+                    <div class="error">Please type at least 6 characters.</div>
+                </div>
+                <div class="previous-search"> 
+                    <div class="title">Previous Search Keys</div>
+                    <div class="list">
+                    </div>
+                </div>
+            </div>
+        <div id="movie-list">
+            <div id="result-list" class="list">
+                <div class="list-wrapper">
+                    <div class="desc">Search Results</div>
+                    <div class="placeholder no-result">
+                        <em class="fas fa-ban"></em> 
+                        No Result
+                    </div>
+                    <div class="placeholder loading">
+                        <div class="circle-container">
+                            <div class="circle"></div>
+                        </div>
+                        <span>Loading</span>
+                    </div>
+                    <div class="items">
+                    </div>
+                </div>
+            </div>
+            <div id="fav-list" class="list">
+                <div class="list-wrapper">
+                    <div class="desc"> Favourites</div>
+                    <div class="items">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
