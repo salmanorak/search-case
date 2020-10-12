@@ -21,7 +21,6 @@ Movie Searchbox case solution with below features
 7. FadeIn and FadeOut animations added to list for added and removed items.
 8. Layout changed for different screen sizes to achieve responsive UI.
 9. Maximum result limit is added as option.
-10. 
 
 ## DemoLink
 https://salmanorak.github.io/search-case/
